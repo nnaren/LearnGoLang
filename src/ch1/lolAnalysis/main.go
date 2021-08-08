@@ -53,20 +53,37 @@ type Info struct{
     fileName string
     fileTime string
 }
+
+func check(e error) {
+    if e != nil {
+        panic(e)
+    }
+}
 func main()  {
     baseUrl := "https://game.gtimg.cn/images/lol/act/img/js/hero/"
     var url string
-    // ids := []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
-    //     25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,50,51,
-    //     53,54,55,56,57,58,59,60,61,62,63,64,67,68,69,72,74,75,76,77,78,79,80,81,
-    //     82,83,84,85,86,89,90,91,92,96,98,99,101,102,103,104,105,106,107,110,111,
-    //     112,113,114,115,117,119,120,121,122,126,127,131,133,134,136,141,142,143,
-    //     145,147,150,154,157,161,163,164,166,201,202,203,222,223,234,235,236,238,
-    //     240,245,246,254,266,267,268,350,360,412,420,421,427,429,432,497,498,516,
-    //     517,518,523,526,555,777,875,876,887}
-    ids := []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}
+    ids := []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+        25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,50,51,
+        53,54,55,56,57,58,59,60,61,62,63,64,67,68,69,72,74,75,76,77,78,79,80,81,
+        82,83,84,85,86,89,90,91,92,96,98,99,101,102,103,104,105,106,107,110,111,
+        112,113,114,115,117,119,120,121,122,126,127,131,133,134,136,141,142,143,
+        145,147,150,154,157,161,163,164,166,201,202,203,222,223,234,235,236,238,
+        240,245,246,254,266,267,268,350,360,412,420,421,427,429,432,497,498,516,
+        517,518,523,526,555,777,875,876,887}
+    // ids := []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}
     num := 0
     // idValid []int
+
+    f, err3 := os.Create("./heros.csv") //创建文件
+    check(err3)
+    defer f.Close()
+
+    // var writeString = "Name,Attack,Defense,Magic\n"
+    var d1 = []byte("Name,Attack,Defense,Magic,Difficulty,Hp,Hpperlevel,Mp,Mpperlevel,Movespeed,Armor,Armorperlevel\n")
+    n2, err3 := f.Write(d1) //写入文件(字节数组)
+    check(err3)
+
+    fmt.Printf("写入 %d 个字节n", n2)
     for  _,i := range ids {
         // strconv.Itoa(int)
         url = baseUrl + strconv.Itoa(i) + ".js";
@@ -91,9 +108,30 @@ func main()  {
         }
     
         fmt.Println(i)
-        fmt.Println(info.Hero.Title)
+        fmt.Println(info.Hero.Attack)
         fmt.Println("大招：《" + info.Spells[1].Name + "》")
         fmt.Println(info.Spells[1].Description)
+
+        
+        // "Name,Attack,Defense,Magic,Difficulty,Hp,Hpperlevel,Mp,Mpperlevel,Movespeed,Armor,Armorperlevel"
+        d1 = []byte(info.Hero.Name + "," +
+                    info.Hero.Attack + "," + 
+                    info.Hero.Defense+ "," +
+                    info.Hero.Magic + "," + 
+                    info.Hero.Difficulty + "," + 
+                    info.Hero.Hp + "," + 
+                    info.Hero.Hpperlevel + "," + 
+                    info.Hero.Mp + "," + 
+                    info.Hero.Mpperlevel + "," + 
+                    info.Hero.Movespeed + "," + 
+                    info.Hero.Armor + "," + 
+                    info.Hero.Armorperlevel + "\n") 
+        n2, err3 := f.Write(d1) //写入文件(字节数组)
+        check(err3)
+        fmt.Printf("写入 %d 个字节n", n2)
+        // n3, err3 := f.WriteString("writesn") //写入文件(字节数组)
+        // fmt.Printf("写入 %d 个字节n", n3)
+        f.Sync()
         // FormatFloat
         // fmt.Println(strconv.ParseFloat(info.Hero.Spellblockperlevel, 32))
 

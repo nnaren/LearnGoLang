@@ -5,11 +5,10 @@ package bzip_test
 
 import (
 	"bytes"
+	"bzip"
 	"compress/bzip2" // reader
 	"io"
 	"testing"
-
-	"gopl.io/ch13/bzip" // writer
 )
 
 func TestBzip2(t *testing.T) {
